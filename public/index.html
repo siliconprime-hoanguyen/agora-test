@@ -51,9 +51,9 @@
             console.log("Try to get dynamic key");
             var use_https = ('https:' == document.location.protocol ? true : false);
             if (use_https) {
-                var url_str = "https://agora.codehub.io/dynamic_key?channelName=" + channel.value;
+                var url_str = "/dynamic_key?channelName=" + channel.value;
             } else {
-                var url_str = "http://agora.codehub.io/dynamic_key?channelName=" + channel.value;
+                var url_str = "/dynamic_key?channelName=" + channel.value;
             }
             $.ajax({
                 url: url_str,
@@ -61,17 +61,17 @@
                     console.log("Failed to get dynamic key");
                 },
                 success: function(response) {
-                  console.log('start');
+                    console.log('start');
                     console.log(response.key);
                     console.log('end');
                     dynamic_key = response.key;
                     console.log("Init AgoraRTC client with vendor key: " + key.value);
-                    client = AgoraRTC.createClient();
+                    client = AgoraRTC.createRtcClient();
                     // for dynamic key
                     /*client.init(dynamic_key, function () {*/
                     client.init(dynamic_key, function() {
                         console.log("AgoraRTC client initialized");
-                        client.join(channel.value, 1, function(uid) {
+                        client.join(channel.value, Math.round((Math.random()*1000000)), function(uid) {
                             console.log("User " + uid + " join channel successfully");
                             if (document.getElementById("video").checked) {
                                 camera = videoSource.value;
